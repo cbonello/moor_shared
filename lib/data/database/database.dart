@@ -11,9 +11,8 @@ class Todos extends Table {
 
   DateTimeColumn get targetDate => dateTime().nullable()();
 
-  IntColumn get category => integer()
-      .nullable()
-      .customConstraint('NULLABLE REFERENCES categories(id)')();
+  IntColumn get category =>
+      integer().nullable().customConstraint('NULLABLE REFERENCES categories(id)')();
 }
 
 @DataClassName('Category')
@@ -54,7 +53,7 @@ class Database extends _$Database {
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (Migrator m) {
-        return m.createAllTables();
+        return m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
         if (from == 1) {
@@ -89,7 +88,7 @@ class Database extends _$Database {
   Stream<List<CategoryWithCount>> categoriesWithCount() {
     // select all categories and load how many associated entries there are for
     // each category
-    return customSelectQuery(
+    return customSelect(
       'SELECT c.id, c.desc, '
       '(SELECT COUNT(*) FROM todos WHERE category = c.id) AS amount '
       'FROM categories c '
@@ -110,8 +109,8 @@ class Database extends _$Database {
   /// Watches all entries in the given [category]. If the category is null, all
   /// entries will be shown instead.
   Stream<List<EntryWithCategory>> watchEntriesInCategory(Category category) {
-    final query = select(todos).join(
-        [leftOuterJoin(categories, categories.id.equalsExp(todos.category))]);
+    final query = select(todos)
+        .join([leftOuterJoin(categories, categories.id.equalsExp(todos.category))]);
 
     if (category != null) {
       query.where(categories.id.equals(category.id));
@@ -145,8 +144,7 @@ class Database extends _$Database {
   }
 
   Future<int> createCategory(String description) {
-    return into(categories)
-        .insert(CategoriesCompanion(description: Value(description)));
+    return into(categories).insert(CategoriesCompanion(description: Value(description)));
   }
 
   Future deleteCategory(Category category) {

@@ -14,10 +14,7 @@ class CategoriesDrawer extends StatelessWidget {
           DrawerHeader(
             child: Text(
               'Todo-List Demo with moor',
-              style: Theme.of(context)
-                  .textTheme
-                  .subhead
-                  .copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white),
             ),
             decoration: BoxDecoration(color: Colors.orange),
           ),
@@ -43,8 +40,7 @@ class CategoriesDrawer extends StatelessWidget {
                 child: const Text('Add category'),
                 textColor: Theme.of(context).accentColor,
                 onPressed: () {
-                  showDialog(
-                      context: context, builder: (_) => AddCategoryDialog());
+                  showDialog(context: context, builder: (_) => AddCategoryDialog());
                 },
               ),
             ],
@@ -132,9 +128,7 @@ class _CategoryDrawerEntry extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Material(
-        color: isActive
-            ? Colors.orangeAccent.withOpacity(0.3)
-            : Colors.transparent,
+        color: isActive ? Colors.orangeAccent.withOpacity(0.3) : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           onTap: () {
